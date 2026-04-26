@@ -54,7 +54,7 @@
     <div id="scr-ritual-eyes" class="screen" style="display:none;">
         <div class="portal"></div>
         <div class="eye-ritual">Cierra los ojos...</div>
-        <p>Visualiza tu pregunta con fe. Siente la energía del cosmos.</p>
+        <p>Visualiza tu pregunta con fe. Siente la energía del cosmos fluyendo hacia ti.</p>
         <button onclick="mostrarArcanoDia()">Ya estoy lista</button>
     </div>
     <div id="scr-daily" class="screen" style="display:none;">
@@ -72,7 +72,7 @@
     <div id="scr-loading" class="special-screen">
         <div class="portal"></div>
         <h3 class="eye-ritual">Las cartas están hablando...</h3>
-        <p>Escuchando el susurro del destino.</p>
+        <p>El destino está revelando su camino.</p>
     </div>
     <div id="scr-results" class="special-screen">
         <h2>Revelación Sagrada</h2>
@@ -81,13 +81,13 @@
     </div>
     <div id="scr-peticion" class="special-screen">
         <h3>Tu Petición al Cosmos</h3>
-        <textarea id="p-input" placeholder="Escribe aquí tu deseo..."></textarea>
+        <textarea id="p-input" placeholder="Escribe aquí tu deseo para que sea entregado a las estrellas..."></textarea>
         <button onclick="enviarPeticion()">Sellar Petición</button>
     </div>
     <div id="scr-final" class="special-screen">
         <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80" class="cosmos-img">
         <h2>Petición Enviada</h2>
-        <p>Tu mensaje se ha disuelto en la luz divina. Las estrellas trabajan para ti.</p>
+        <p>Tu mensaje se ha disuelto en la luz divina. Las estrellas trabajan ahora para ti.</p>
         <button onclick="location.reload()">Regresar al Círculo</button>
     </div>
 <script>
@@ -148,13 +148,13 @@
         const c = mazo[(n.length + m + d) % mazo.length];
         document.getElementById('daily-welcome').innerText = `Bienvenida, ${n}`;
         document.getElementById('daily-card-container').innerHTML = `<img src="${c.img}" style="width:160px; border-radius:10px; border:2px solid var(--oro);"><h3>${c.n}</h3>`;
-        document.getElementById('daily-text').innerText = c.e;
+        document.getElementById('daily-text').innerHTML = `<strong>${c.n}:</strong> ${c.e}`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
     function irTableroRitual() { transition('scr-daily', 'scr-ritual-3'); render(); }
     function render() {
         const b = document.getElementById('main-board');
-        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.e}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
+        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
     }
     function mezclar() {
         barajeado = true;
@@ -168,19 +168,19 @@
         }, 1200);
     }
     let p = [];
-    function pick(el, e) {
+    function pick(el, n, e) {
         if(!barajeado) return alert("Debes barajar las energías primero.");
         if(el.classList.contains('flipped') || p.length >= 3) return;
         el.classList.add('flipped');
-        p.push(e);
+        p.push({n, e});
         if(p.length === 3) {
             setTimeout(() => {
                 transition('scr-ritual-3', 'scr-loading');
                 setTimeout(() => {
                     document.getElementById('res-content').innerHTML = `
-                        <div class="res-txt"><strong>Pasado:</strong> ${p[0]}</div>
-                        <div class="res-txt"><strong>Presente:</strong> ${p[1]}</div>
-                        <div class="res-txt"><strong>Porvenir:</strong> ${p[2]}</div>
+                        <div class="res-txt"><strong>Pasado (${p[0].n}):</strong> ${p[0].e}</div>
+                        <div class="res-txt"><strong>Presente (${p[1].n}):</strong> ${p[1].e}</div>
+                        <div class="res-txt"><strong>Porvenir (${p[2].n}):</strong> ${p[2].e}</div>
                     `;
                     transition('scr-loading', 'scr-results');
                 }, 4000); 
