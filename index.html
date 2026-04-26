@@ -9,22 +9,26 @@
         :root { --fondo: #050508; --oro: #c5a059; --texto: #d1d1d1; }
         body { background: var(--fondo); color: var(--texto); font-family: 'Lora', serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
         
-        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; animation: fadeIn 1.5s; }
+        /* Animaciones de Transición */
+        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 1s, transform 1s; opacity: 1; transform: scale(1); }
+        .fade-out { opacity: 0 !important; transform: scale(0.9) !important; }
+        .fade-in { animation: fadeIn 1.5s; }
+
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; }
         
-        /* Círculo Místico / Portal */
-        .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 15s linear infinite; box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); position: relative; }
+        /* Portal / Círculo */
+        .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 25px rgba(197, 160, 89, 0.2); position: relative; }
         .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.5rem; }
         @keyframes rotatePortal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        button { background: transparent; border: 1px solid var(--oro); color: var(--oro); padding: 14px; font-family: 'Cinzel'; cursor: pointer; margin: 10px auto; width: 280px; border-radius: 4px; transition: 0.4s; text-transform: uppercase; font-size: 0.85rem; }
+        button { background: transparent; border: 1px solid var(--oro); color: var(--oro); padding: 14px; font-family: 'Cinzel'; cursor: pointer; margin: 10px auto; width: 280px; border-radius: 4px; transition: 0.4s; text-transform: uppercase; font-size: 0.85rem; outline: none; }
         button:hover { background: var(--oro); color: black; box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
         
         input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; }
-        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; }
+        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; }
 
         /* Tablero y Cartas */
-        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 10px; width: 100%; margin: 20px auto; transition: 1.8s; transform: scale(0.65); opacity: 0.4; }
+        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 10px; width: 100%; margin: 20px auto; transition: 1.8s; transform: scale(0.65); opacity: 0.3; }
         .board-focus { transform: scale(1) !important; opacity: 1 !important; }
         .card { width: 100%; aspect-ratio: 2/3.5; perspective: 1000px; cursor: pointer; }
         .card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.7s; }
@@ -35,10 +39,10 @@
         .front img { width: 100%; height: 85%; object-fit: cover; }
         .front span { font-size: 8px; color: black; font-weight: bold; padding: 2px; font-family: 'Cinzel'; }
 
-        /* Overlay de Resultados */
-        #result-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,8,0.98); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; overflow-y: auto; }
-        .res-txt { font-style: italic; color: #fff; margin: 15px 0; font-size: 1.1rem; border-left: 2px solid var(--oro); padding-left: 15px; text-align: left; line-height: 1.6; animation: fadeIn 2s; }
+        /* Pantallas Especiales (Resultados, Petición, Éxito) */
+        .special-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--fondo); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; overflow-y: auto; }
         
+        .res-txt { font-style: italic; color: #fff; margin: 15px 0; font-size: 1.1rem; border-left: 2px solid var(--oro); padding-left: 15px; text-align: left; line-height: 1.6; }
         .cosmos-img { width: 120px; height: 120px; border-radius: 50%; border: 1px solid var(--oro); margin: 20px auto; box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
         .eye-ritual { font-size: 1.4rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; margin-top: 10px; }
         
@@ -65,8 +69,7 @@
     <div id="scr-ritual-eyes" class="screen" style="display:none;">
         <div class="portal"></div>
         <div class="eye-ritual">Cierra los ojos...</div>
-        <p>Visualiza tu pregunta y siente la energía fluyendo hacia el oráculo.</p>
-        <p>Respira profundo...</p>
+        <p>Visualiza tu pregunta con fe. Siente cómo la energía fluye.</p>
         <button onclick="mostrarArcanoDia()">Ya estoy lista</button>
     </div>
 
@@ -75,59 +78,65 @@
         <h2>Tu Mensaje de Hoy</h2>
         <div id="daily-card-container"></div>
         <div id="daily-text" class="res-txt"></div>
-        <button onclick="irTableroRitual()">Realizar Lectura de 3 Cartas</button>
+        <button onclick="irTableroRitual()">Lectura Profunda</button>
     </div>
 
     <div id="scr-ritual-3" class="screen" style="display:none;">
-        <p id="guia-3" style="color:var(--oro)">Baraja el mazo para tu porvenir...</p>
+        <p id="guia-3" style="color:var(--oro)">Baraja para tu porvenir...</p>
         <button id="btn-mix" onclick="mezclar()">Mezclar Energías</button>
         <div id="main-board"></div>
     </div>
 
-    <div id="result-overlay">
-        <h2 id="res-title">Revelación Sagrada</h2>
+    <div id="scr-loading" class="special-screen">
+        <div class="portal"></div>
+        <h3 class="eye-ritual">Las cartas están hablando...</h3>
+        <p>Escucha el susurro del destino.</p>
+    </div>
+
+    <div id="scr-results" class="special-screen">
+        <h2>Revelación Sagrada</h2>
         <div id="res-content" style="max-width: 500px;"></div>
-        <button id="btn-peticion" onclick="abrirPeticion()">Elevar Petición al Éter</button>
+        <button onclick="irPeticion()">Elevar Petición</button>
     </div>
 
-    <div id="scr-peticion" class="screen" style="display:none;">
-        <h3>¿Qué deseas pedir al Universo?</h3>
-        <p>Escribe tu intención para que el oráculo la entregue a las estrellas.</p>
+    <div id="scr-peticion" class="special-screen">
+        <h3>Tu Petición al Cosmos</h3>
+        <p>Escribe tu deseo para que las estrellas lo reciban.</p>
         <textarea id="p-input" placeholder="Mi deseo es..."></textarea>
-        <button onclick="enviarPeticion()">Sellar Petición</button>
+        <button onclick="enviarPeticion()">Sellar Deseo</button>
     </div>
 
-    <div id="scr-final" class="screen" style="display:none;">
+    <div id="scr-final" class="special-screen">
         <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80" class="cosmos-img">
         <h2>Petición Enviada</h2>
-        <p>Tu mensaje se ha disuelto en la luz del cosmos. Las estrellas trabajan ahora en tu favor.</p>
-        <button onclick="location.reload()">Regresar al Círculo</button>
+        <p>Tu mensaje se ha disuelto en la luz divina. Las estrellas trabajan para ti.</p>
+        <button onclick="location.reload()">Volver al Círculo</button>
     </div>
 
 <script>
     const mazo = [
-        { n: "El Loco", img: "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg", e: "El universo te pide un salto de fe. No temas al vacío, pues tus alas aparecerán." },
-        { n: "El Mago", img: "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg", e: "Tienes todo para triunfar. Manifiesta tu voluntad; hoy el cosmos obedece a tu palabra." },
-        { n: "La Sacerdotisa", img: "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg", e: "Guarda silencio. Confía en tu intuición antes de lo que ves. Las respuestas están en tu interior." },
-        { n: "La Emperatriz", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_03_Empress.jpg", e: "Día de abundancia y creación. Lo que hoy siembres con amor, pronto será un bosque de bendiciones." },
-        { n: "El Emperador", img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg", e: "Es hora de poner orden. Define tus límites y asume el liderazgo de tu vida con firmeza." },
-        { n: "El Hierofante", img: "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg", e: "Busca sabiduría en lo profundo. Escucha la experiencia para encontrar tu camino sagrado." },
-        { n: "Los Enamorados", img: "https://upload.wikimedia.org/wikipedia/commons/3/35/RWS_Tarot_06_Lovers.jpg", e: "Elige con el corazón. La armonía llega cuando tus acciones reflejan tus valores más puros." },
-        { n: "El Carro", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_07_Chariot.jpg", e: "Victoria asegurada. Toma las riendas y avanza; nada detiene a un espíritu enfocado." },
-        { n: "La Fuerza", img: "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg", e: "Tu fuerza es tu suavidad. Domina tus miedos con paciencia; tienes el coraje para vencer." },
-        { n: "El Ermitaño", img: "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg", e: "Retírate al silencio. En la soledad encontrarás la luz que ilumina tu verdad paso a paso." },
-        { n: "La Rueda", img: "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg", e: "El destino gira. Acepta los cambios; el universo se reacomoda para traerte nuevas oportunidades." },
-        { n: "La Justicia", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg", e: "Cosecharás lo que has sembrado. Actúa con integridad; la balanza cósmica busca la rectitud." },
-        { n: "El Colgado", img: "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg", e: "Detente. Mira desde otro ángulo. Lo que parece sacrificio es en realidad tu liberación." },
-        { n: "La Muerte", img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg", e: "Algo debe morir para que renazcas. Suelta lo viejo y deja que la transformación limpie tu vida." },
-        { n: "La Templanza", img: "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg", e: "Busca el equilibrio. Mezcla paciencia con acción; la armonía interna hará el trabajo místico." },
-        { n: "El Diablo", img: "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg", e: "Reconoce tus cadenas. La llave siempre estuvo en tu mano; libérate de las sombras hoy." },
-        { n: "La Torre", img: "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg", e: "Lo falso debe caer. No llores las ruinas; la caída te libera para construir sobre la verdad." },
-        { n: "La Estrella", img: "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg", e: "Después de la tormenta llega la luz pura. Tus esperanzas son escuchadas bajo el cielo estrellado." },
-        { n: "La Luna", img: "https://upload.wikimedia.org/wikipedia/commons/f/f7/RWS_Tarot_18_Moon.jpg", e: "Navega tus emociones. Escucha tus sueños pero mantén los pies firmes en la tierra." },
-        { n: "El Sol", img: "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg", e: "Éxito radiante. Todo lo que toques hoy prosperará. Comparte tu luz con el mundo." },
-        { n: "El Juicio", img: "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg", e: "Es tiempo de despertar. Perdónate y renace; deja atrás el pasado definitivamente." },
-        { n: "El Mundo", img: "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg", e: "Ciclo completado. Estás en armonía total. Disfruta de tu plenitud, el éxito es tuyo." }
+        { n: "El Loco", img: "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg", e: "Da un salto de fe. No temas, tus alas aparecerán." },
+        { n: "El Mago", img: "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg", e: "Manifiesta tu voluntad; hoy el cosmos obedece a tu palabra." },
+        { n: "La Sacerdotisa", img: "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg", e: "Guarda silencio y escucha tu intuición profunda." },
+        { n: "La Emperatriz", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_03_Empress.jpg", e: "Día de abundancia. Lo que siembres con amor florecerá." },
+        { n: "El Emperador", img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg", e: "Pon orden y asume el liderazgo de tu vida con firmeza." },
+        { n: "El Hierofante", img: "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg", e: "Busca sabiduría en la experiencia para encontrar tu camino." },
+        { n: "Los Enamorados", img: "https://upload.wikimedia.org/wikipedia/commons/3/35/RWS_Tarot_06_Lovers.jpg", e: "Elige con el corazón. La armonía llega con la verdad." },
+        { n: "El Carro", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_07_Chariot.jpg", e: "Victoria asegurada. Avanza con determinación y enfoque." },
+        { n: "La Fuerza", img: "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg", e: "Tu fuerza es tu suavidad. Domina tus miedos con paciencia." },
+        { n: "El Ermitaño", img: "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg", e: "Busca tu luz interna en el silencio y la soledad." },
+        { n: "La Rueda", img: "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg", e: "El destino gira. Acepta los cambios, traen nuevas oportunidades." },
+        { n: "La Justicia", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg", e: "Cosecharás lo sembrado. Actúa con total integridad hoy." },
+        { n: "El Colgado", img: "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg", e: "Detente. Mira desde otro ángulo. La pausa te libera." },
+        { n: "La Muerte", img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg", e: "Algo debe morir para que renazcas. Suelta lo viejo." },
+        { n: "La Templanza", img: "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg", e: "Busca equilibrio y sanación. Ten paciencia divina." },
+        { n: "El Diablo", img: "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg", e: "Reconoce tus ataduras y libérate de las sombras hoy." },
+        { n: "La Torre", img: "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg", e: "Lo falso debe caer para que construyas sobre la verdad." },
+        { n: "La Estrella", img: "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg", e: "Esperanza y luz pura. Tus deseos son escuchados arriba." },
+        { n: "La Luna", img: "https://upload.wikimedia.org/wikipedia/commons/f/f7/RWS_Tarot_18_Moon.jpg", e: "Navega tus emociones. Confía en tus sueños sagrados." },
+        { n: "El Sol", img: "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg", e: "Éxito radiante y claridad. Comparte tu luz con el mundo." },
+        { n: "El Juicio", img: "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg", e: "Tiempo de despertar. Perdónate y renace definitivamente." },
+        { n: "El Mundo", img: "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg", e: "Ciclo completado. Armonía total y realización plena." }
     ];
 
     window.onload = function() {
@@ -136,14 +145,26 @@
         else document.getElementById('scr-ritual-eyes').style.display = 'flex';
     };
 
+    function transition(fromId, toId, special = false) {
+        const from = document.getElementById(fromId);
+        const to = document.getElementById(toId);
+        from.classList.add('fade-out');
+        setTimeout(() => {
+            from.style.display = 'none';
+            from.classList.remove('fade-out');
+            to.style.display = special ? 'flex' : 'flex';
+            to.classList.add('fade-in');
+            setTimeout(() => to.classList.remove('fade-in'), 1500);
+        }, 1000);
+    }
+
     function saveUser() {
         const n = document.getElementById('user-name').value;
         const m = document.getElementById('user-month').value;
         if(!n || !m) return alert("Identifícate ante el oráculo.");
         localStorage.setItem('u_n', n);
         localStorage.setItem('u_m', m);
-        document.getElementById('scr-login').style.display = 'none';
-        document.getElementById('scr-ritual-eyes').style.display = 'flex';
+        transition('scr-login', 'scr-ritual-eyes');
     }
 
     function mostrarArcanoDia() {
@@ -151,17 +172,14 @@
         const m = parseInt(localStorage.getItem('u_m'));
         const d = new Date().getDate();
         const c = mazo[(n.length + m + d) % mazo.length];
-
         document.getElementById('daily-welcome').innerText = `Mensaje para ${n}`;
         document.getElementById('daily-card-container').innerHTML = `<img src="${c.img}" style="width:160px; border-radius:10px; border:2px solid var(--oro);"><h3>${c.n}</h3>`;
         document.getElementById('daily-text').innerText = c.e;
-        document.getElementById('scr-ritual-eyes').style.display = 'none';
-        document.getElementById('scr-daily').style.display = 'flex';
+        transition('scr-ritual-eyes', 'scr-daily');
     }
 
     function irTableroRitual() {
-        document.getElementById('scr-daily').style.display = 'none';
-        document.getElementById('scr-ritual-3').style.display = 'flex';
+        transition('scr-daily', 'scr-ritual-3');
         render();
     }
 
@@ -187,28 +205,24 @@
         el.classList.add('flipped');
         p.push(e);
         if(p.length === 3) {
-            document.getElementById('guia-3').innerText = "El destino está respondiendo...";
-            // PAUSA MÍSTICA ANTES DE RESULTADOS
+            // TRANSICIÓN A PANTALLA DE CARGA MÍSTICA
             setTimeout(() => {
-                document.getElementById('res-content').innerHTML = `
-                    <div class="res-txt"><strong>Pasado:</strong> ${p[0]}</div>
-                    <div class="res-txt"><strong>Presente:</strong> ${p[1]}</div>
-                    <div class="res-txt"><strong>Porvenir:</strong> ${p[2]}</div>
-                `;
-                document.getElementById('result-overlay').style.display = 'flex';
-            }, 2000);
+                transition('scr-ritual-3', 'scr-loading', true);
+                // PAUSA MÍSTICA REAL (3 segundos)
+                setTimeout(() => {
+                    document.getElementById('res-content').innerHTML = `
+                        <div class="res-txt"><strong>Pasado:</strong> ${p[0]}</div>
+                        <div class="res-txt"><strong>Presente:</strong> ${p[1]}</div>
+                        <div class="res-txt"><strong>Porvenir:</strong> ${p[2]}</div>
+                    `;
+                    transition('scr-loading', 'scr-results', true);
+                }, 3000);
+            }, 1000);
         }
     }
 
-    function abrirPeticion() {
-        document.getElementById('result-overlay').style.display = 'none';
-        document.getElementById('scr-peticion').style.display = 'flex';
-    }
-
-    function enviarPeticion() {
-        document.getElementById('scr-peticion').style.display = 'none';
-        document.getElementById('scr-final').style.display = 'flex';
-    }
+    function irPeticion() { transition('scr-results', 'scr-peticion', true); }
+    function enviarPeticion() { transition('scr-peticion', 'scr-final', true); }
 </script>
 </body>
 </html>
