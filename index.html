@@ -8,7 +8,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;1,500&display=swap');
         :root { --fondo: #050508; --oro: #c5a059; --texto: #d1d1d1; }
         body { background: var(--fondo); color: var(--texto); font-family: 'Lora', serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
-        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 1s, transform 1s; opacity: 1; }
+        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 1s, transform 1s; }
         .fade-out { opacity: 0 !important; transform: scale(0.9) !important; }
         .fade-in { animation: fadeIn 1.5s; }
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; }
@@ -18,7 +18,7 @@
         button { background: transparent; border: 1px solid var(--oro); color: var(--oro); padding: 14px; font-family: 'Cinzel'; cursor: pointer; margin: 10px auto; width: 280px; border-radius: 4px; transition: 0.4s; text-transform: uppercase; font-size: 0.85rem; }
         button:hover { background: var(--oro); color: black; box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
         input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; }
-        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; }
+        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; color: white; text-align: left; width: 90%; }
         #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 10px; width: 100%; margin: 20px auto; transition: 1.8s; transform: scale(0.65); opacity: 0.3; }
         .board-focus { transform: scale(1) !important; opacity: 1 !important; }
         .card { width: 100%; aspect-ratio: 2/3.5; perspective: 1000px; cursor: pointer; }
@@ -31,7 +31,7 @@
         .front span { font-size: 8px; color: black; font-weight: bold; padding: 2px; font-family: 'Cinzel'; }
         .special-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--fondo); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; box-sizing: border-box; overflow-y: auto; }
         .res-txt { font-style: italic; color: #fff; margin: 15px 0; font-size: 1.1rem; border-left: 2px solid var(--oro); padding-left: 15px; text-align: left; line-height: 1.6; }
-        .consejo-box { border: 1px dashed var(--oro); padding: 15px; margin-top: 20px; background: rgba(197, 160, 89, 0.05); }
+        .consejo-box { border: 1px dashed var(--oro); padding: 15px; margin-top: 20px; background: rgba(197, 160, 89, 0.05); color: var(--oro); font-weight: bold; }
         .eye-ritual { font-size: 1.4rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; margin-top: 10px; }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -87,8 +87,9 @@
     </div>
 
     <div id="scr-peticion" class="special-screen">
-        <h3>Petición al Universo</h3>
-        <textarea id="p-input" placeholder="Tu deseo para las estrellas..."></textarea>
+        <h3>Tu Petición al Cosmos</h3>
+        <p>Escribe tu deseo para que las estrellas lo reciban.</p>
+        <textarea id="p-input" placeholder="Mi deseo es..."></textarea>
         <button onclick="enviarPeticion()">Sellar Petición</button>
     </div>
 
@@ -102,28 +103,28 @@
 <script>
     let barajeado = false;
     const mazo = [
-        { n: "El Loco", e: "un salto al vacío con fe pura", s: "Nuevos Comienzos" },
-        { n: "El Mago", e: "el poder absoluto de tu voluntad", s: "Manifestación" },
-        { n: "La Sacerdotisa", e: "secretos que tu intuición ya conoce", s: "Intuición" },
-        { n: "La Emperatriz", e: "la fertilidad de tus proyectos y sueños", s: "Abundancia" },
-        { n: "El Emperador", e: "la necesidad de estructura y liderazgo firme", s: "Orden" },
-        { n: "El Hierofante", e: "lecciones que vienen de lo sagrado y lo tradicional", s: "Sabiduría" },
-        { n: "Los Enamorados", e: "una elección que debe nacer del alma", s: "Elección" },
-        { n: "El Carro", e: "victoria rápida a través del enfoque total", s: "Avance" },
-        { n: "La Fuerza", e: "el coraje de domar tus miedos con suavidad", s: "Coraje" },
-        { n: "El Ermitaño", e: "la luz que solo encontrarás en tu silencio", s: "Introspección" },
-        { n: "La Rueda", e: "giros del destino que no puedes evitar", s: "Cambio" },
-        { n: "La Justicia", e: "el equilibrio perfecto de causa y efecto", s: "Verdad" },
-        { n: "El Colgado", e: "una pausa necesaria para cambiar tu visión", s: "Pausa" },
-        { n: "La Muerte", e: "el fin de un ciclo para que algo superior nazca", s: "Transformación" },
-        { n: "La Templanza", e: "la alquimia de la paciencia y la moderación", s: "Armonía" },
-        { n: "El Diablo", e: "ataduras que solo tu voluntad puede romper", s: "Liberación" },
-        { n: "La Torre", e: "una revelación súbita que destruye lo falso", s: "Revelación" },
-        { n: "La Estrella", e: "la luz de la esperanza que guía tus pasos", s: "Sanación" },
-        { n: "La Luna", e: "navegar por las emociones y las ilusiones", s: "Misterio" },
-        { n: "El Sol", e: "éxito radiante y claridad absoluta", s: "Felicidad" },
-        { n: "El Juicio", e: "un llamado a despertar y dejar el pasado", s: "Renacimiento" },
-        { n: "El Mundo", e: "la realización total y el cierre de un gran ciclo", s: "Plenitud" }
+        { n: "El Loco", e: "un salto al vacío con fe pura", img: "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg" },
+        { n: "El Mago", e: "el poder absoluto de tu voluntad", img: "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg" },
+        { n: "La Sacerdotisa", e: "secretos que tu intuición ya conoce", img: "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg" },
+        { n: "La Emperatriz", e: "la abundancia creativa", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_03_Empress.jpg" },
+        { n: "El Emperador", e: "la estructura y liderazgo firme", img: "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg" },
+        { n: "El Hierofante", e: "sabiduría tradicional", img: "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg" },
+        { n: "Los Enamorados", e: "una elección del alma", img: "https://upload.wikimedia.org/wikipedia/commons/3/35/RWS_Tarot_06_Lovers.jpg" },
+        { n: "El Carro", e: "victoria con enfoque total", img: "https://upload.wikimedia.org/wikipedia/commons/a/af/RWS_Tarot_07_Chariot.jpg" },
+        { n: "La Fuerza", e: "coraje y suavidad interna", img: "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg" },
+        { n: "El Ermitaño", e: "luz en tu propio silencio", img: "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg" },
+        { n: "La Rueda", e: "giros del destino inesperados", img: "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg" },
+        { n: "La Justicia", e: "equilibrio de causa y efecto", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg" },
+        { n: "El Colgado", e: "una pausa necesaria", img: "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg" },
+        { n: "La Muerte", e: "el fin de un ciclo viejo", img: "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg" },
+        { n: "La Templanza", e: "armonía y paciencia", img: "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg" },
+        { n: "El Diablo", e: "ataduras que debes romper", img: "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg" },
+        { n: "La Torre", e: "revelación que destruye lo falso", img: "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg" },
+        { n: "La Estrella", e: "luz de esperanza guía", img: "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg" },
+        { n: "La Luna", e: "misterio y emociones", img: "https://upload.wikimedia.org/wikipedia/commons/f/f7/RWS_Tarot_18_Moon.jpg" },
+        { n: "El Sol", e: "éxito radiante", img: "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg" },
+        { n: "El Juicio", e: "renacimiento y despertar", img: "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg" },
+        { n: "El Mundo", e: "plenitud y realización", img: "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg" }
     ];
 
     const consejos = [
@@ -168,6 +169,7 @@
         const d = new Date().getDate();
         const c = mazo[(n.length + m + d) % mazo.length];
         document.getElementById('daily-welcome').innerText = `Bienvenida, ${n}`;
+        document.getElementById('daily-card-container').innerHTML = `<img src="${c.img}" style="width:160px; border-radius:10px; border:2px solid var(--oro);"><h3>${c.n}</h3>`;
         document.getElementById('daily-text').innerHTML = `Bajo la influencia de tu mes de nacimiento, hoy recibes a <strong>${c.n}</strong>. Esto indica ${c.e}.`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
@@ -176,7 +178,7 @@
 
     function render() {
         const b = document.getElementById('main-board');
-        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/RWS_Tarot_01_Magician.jpg/150px-RWS_Tarot_01_Magician.jpg"><span>${c.n}</span></div></div></div>`).join('');
+        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
     }
 
     function mezclar() {
@@ -206,8 +208,8 @@
                     
                     document.getElementById('res-content').innerHTML = `
                         <div class="res-txt">
-                            Las estrellas han hablado para ti. La combinación de <strong>${p[0].n}</strong>, <strong>${p[1].n}</strong> y <strong>${p[2].n}</strong> 
-                            revela un camino donde ${p[0].e}, sumado a ${p[1].e}, para finalmente alcanzar ${p[2].e}.
+                            Las estrellas han hablado para ti, Rubí. La combinación sagrada de <strong>${p[0].n}</strong>, <strong>${p[1].n}</strong> y <strong>${p[2].n}</strong> 
+                            revela una energía donde ${p[0].e}, sumado a ${p[1].e}, para finalmente alcanzar ${p[2].e}. Tu signo y tu mes de nacimiento potencian este mensaje, indicando que el cosmos está trabajando en tu favor.
                         </div>
                         <div class="consejo-box">
                             <strong>Consejo de la Semana:</strong><br>
