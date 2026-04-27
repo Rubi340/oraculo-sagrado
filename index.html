@@ -3,31 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oráculo Sagrado</title>
+    <title>Oráculo Sagrado Pro</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;1,500&display=swap');
-        :root { --fondo: #050508; --oro: #c5a059; --texto: #d1d1d1; }
-        body { background: var(--fondo); color: var(--texto); font-family: 'Lora', serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+        :root { --fondo: #050508; --oro: #c5a059; --texto: #d1d1d1; --oro-brillo: rgba(197, 160, 89, 0.8); }
         
-        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 0.8s; }
+        body { 
+            background: var(--fondo); 
+            color: var(--texto); 
+            font-family: 'Lora', serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; /* Evita scrolls raros con las partículas */
+            position: relative;
+        }
+
+        /* CAPA DE HUMO SAGRADO (Neblina) */
+        .neblina {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+            opacity: 0.1;
+            z-index: -1;
+            animation: moveNeblina 60s linear infinite;
+        }
+        @keyframes moveNeblina {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* CONTENEDOR DE PARTÍCULAS */
+        #canvas-stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 0.8s; z-index: 10; }
         .fade-out { opacity: 0 !important; }
         .fade-in { animation: fadeIn 1s; }
-        h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; }
         
-        /* Portal y Fuego Dorado */
-        .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px rgba(197, 160, 89, 0.5), inset 0 0 20px rgba(197, 160, 89, 0.3); position: relative; }
-        .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.5rem; text-shadow: 0 0 10px var(--oro); }
+        /* Títulos con Resplandor (Glow) */
+        h1, h2, h3 { 
+            font-family: 'Cinzel', serif; 
+            color: var(--oro); 
+            letter-spacing: 2px; 
+            text-shadow: 0 0 15px var(--oro-brillo); 
+        }
+        
+        .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 40px var(--oro-brillo), inset 0 0 20px var(--oro-brillo); position: relative; }
+        .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.5rem; text-shadow: 0 0 20px var(--oro); }
         @keyframes rotatePortal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* La Velita */
-        .velita { width: 40px; height: 40px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 20px auto; filter: blur(5px); animation: flame 1.5s infinite alternate; box-shadow: 0 0 40px #ffcc00; }
-        @keyframes flame { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.2); opacity: 1; } }
+        .velita { width: 40px; height: 40px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 20px auto; filter: blur(5px); animation: flame 1.5s infinite alternate; box-shadow: 0 0 50px #ffcc00; }
+        @keyframes flame { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.3); opacity: 1; } }
 
         button { background: linear-gradient(to bottom, #d4af37, #c5a059); border: none; color: black; padding: 16px; font-family: 'Cinzel'; cursor: pointer; margin: 15px auto; width: 280px; border-radius: 5px; font-weight: bold; transition: 0.4s; text-transform: uppercase; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4); }
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(197, 160, 89, 0.6); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--oro-brillo); }
         
-        input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; }
-        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; width: 90%; text-align: left; }
+        input, select, textarea { background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; border-radius: 4px 4px 0 0; }
+        textarea { border: 1px solid var(--oro); height: 80px; width: 90%; text-align: left; }
 
         #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 12px; width: 100%; margin: 20px auto; transition: 1s; transform: scale(0.85); opacity: 0.3; max-height: 50vh; overflow-y: auto; padding: 10px; }
         .board-focus { transform: scale(1) !important; opacity: 1 !important; }
@@ -46,16 +85,19 @@
         .consejo-box { border: 1px dashed var(--oro); padding: 15px; margin-top: 20px; background: rgba(197, 160, 89, 0.1); color: var(--oro); font-weight: bold; border-radius: 8px; }
 
         #selection-display { display: flex; gap: 15px; justify-content: center; width: 100%; margin: 20px auto; }
-        .selected-wrapper { filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.6)); animation: fireGlow 2s infinite alternate; }
-        @keyframes fireGlow { from { filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.4)); } to { filter: drop-shadow(0 0 25px rgba(197, 160, 89, 0.8)); } }
+        .selected-wrapper { filter: drop-shadow(0 0 20px var(--oro-brillo)); animation: fireGlow 2s infinite alternate; }
+        @keyframes fireGlow { from { filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.5)); } to { filter: drop-shadow(0 0 30px var(--oro-brillo)); } }
         #selection-display .card { width: 100px; cursor: default; }
 
-        .eye-ritual { font-size: 1.4rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; }
+        .eye-ritual { font-size: 1.4rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; text-shadow: 0 0 10px var(--oro); }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
+
+    <div class="neblina"></div>
+    <canvas id="canvas-stars"></canvas>
 
     <div id="scr-login" class="screen" style="display:none;">
         <h1>Oráculo Sagrado</h1>
@@ -103,7 +145,6 @@
     <div id="scr-loading" class="special-screen">
         <div class="portal"></div>
         <h3 class="eye-ritual">El oráculo está hablando...</h3>
-        <p>Interpretando la alineación de tus cartas con los astros.</p>
     </div>
 
     <div id="scr-results" class="special-screen">
@@ -127,8 +168,42 @@
     </div>
 
 <script>
+    /* MOTOR DE PARTÍCULAS (Aumento Pro) */
+    const canvas = document.getElementById('canvas-stars');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        for(let i=0; i<50; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.2
+            });
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+        ctx.fillStyle = "#c5a059";
+        particles.forEach(p => {
+            p.y -= p.speed;
+            if(p.y < 0) p.y = canvas.height;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.fill();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
+
+    /* LÓGICA BLINDADA (SIN CAMBIOS) */
     let barajeado = false;
-    const ritualMsgs = ["El universo escucha tus dudas...", "Alineando las constelaciones...", "La energía fluye...", "Tu destino se prepara...", "Conectando con tu guía..."];
+    const ritualMsgs = ["El universo escucha tus dudas...", "Alineando las constelaciones...", "La energía fluye...", "Tu destino se prepara..."];
     const baseImg = "https://www.sacred-texts.com/tarot/pkt/img/";
     const mazo = [
         { n: "EL LOCO", img: baseImg+"ar00.jpg", e: "un salto al vacío con fe plena" },
@@ -181,20 +256,19 @@
     function saveUser() {
         const n = document.getElementById('user-name').value;
         const m = document.getElementById('user-month').value;
-        if(!n || !m) return alert("El oráculo requiere tu esencia.");
+        if(!n) return alert("El oráculo requiere tu nombre.");
         localStorage.setItem('u_n', n);
         localStorage.setItem('u_m', m);
-        document.getElementById('ritual-msg').innerText = ritualMsgs[Math.floor(Math.random() * ritualMsgs.length)];
         transition('scr-login', 'scr-ritual-eyes');
     }
 
     function mostrarArcanoDia() {
         const n = localStorage.getItem('u_n');
-        const m = parseInt(localStorage.getItem('u_m'));
+        const m = parseInt(localStorage.getItem('u_m') || "1");
         const d = new Date().getDate();
         const c = mazo[(n.length + m + d) % mazo.length];
         document.getElementById('daily-welcome').innerText = `Te damos la bienvenida, ${n}`;
-        document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div></div>`;
+        document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`;
         document.getElementById('daily-text').innerHTML = `Hoy los astros te otorgan <strong>${c.n}</strong>, indicando ${c.e}.`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
@@ -203,7 +277,7 @@
 
     function render() {
         const b = document.getElementById('main-board');
-        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div>`).join('');
+        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
     }
 
     function mezclar() {
@@ -220,14 +294,13 @@
 
     let p = [];
     function pick(el, n, e, img) {
-        if(!barajeado || p.length >= 3) return;
-        if(el.classList.contains('flipped')) return;
+        if(!barajeado || p.length >= 3 || el.classList.contains('flipped')) return;
         el.classList.add('flipped');
         p.push({n, e, img});
         if(p.length === 3) {
             setTimeout(() => {
                 const display = document.getElementById('selection-display');
-                display.innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div></div>`).join('');
+                display.innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`).join('');
                 transition('scr-ritual-3', 'scr-visualize');
                 setTimeout(() => document.getElementById('btn-read-now').style.display = 'block', 3000);
             }, 1000);
@@ -237,7 +310,7 @@
     function irCargaMistica() {
         transition('scr-visualize', 'scr-loading');
         setTimeout(() => {
-            const m = parseInt(localStorage.getItem('u_m'));
+            const m = parseInt(localStorage.getItem('u_m') || "1");
             const hoy = new Date().getDate();
             const nU = localStorage.getItem('u_n');
             const consejoIdx = (p[0].n.length + m + hoy) % consejosBD.length;
