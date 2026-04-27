@@ -10,7 +10,7 @@
         
         body { background: var(--fondo); color: var(--texto); font-family: 'Lora', serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
 
-        /* Capas visuales Pro */
+        /* Capas visuales Pro (Neblina y Estrellas) */
         .neblina { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); opacity: 0.1; z-index: -1; animation: moveNeblina 60s linear infinite; }
         @keyframes moveNeblina { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
         #canvas-stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
@@ -21,8 +21,8 @@
         
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; text-shadow: 0 0 15px var(--oro-brillo); margin: 10px 0; }
         
-        /* Ajuste de carta diaria para que no tape el botón */
-        #daily-card-container { width: 180px; margin: 15px auto; }
+        /* Tamaño corregido para que el botón no se pierda */
+        #daily-card-container { width: 160px; margin: 10px auto; }
         #daily-card-container .card { width: 100% !important; }
 
         .portal { width: 80px; height: 80px; border: 2px double var(--oro); border-radius: 50%; margin: 15px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px var(--oro-brillo); position: relative; }
@@ -36,7 +36,7 @@
         
         input, select, textarea { background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 10px; margin: 8px; font-size: 1.1rem; outline: none; width: 80%; max-width: 280px; font-family: 'Lora'; }
         
-        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 10px; width: 100%; margin: 15px auto; max-height: 45vh; overflow-y: auto; padding: 10px; opacity: 0.3; transition: 1s; }
+        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 10px; width: 100%; margin: 15px auto; max-height: 40vh; overflow-y: auto; padding: 10px; opacity: 0.3; transition: 1s; }
         .board-focus { opacity: 1 !important; transform: scale(1); }
         
         .card { width: 100%; aspect-ratio: 2/3.5; perspective: 1000px; cursor: pointer; }
@@ -58,8 +58,6 @@
         #selection-display .card { width: 85px; }
 
         .eye-ritual { font-size: 1.2rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -150,45 +148,44 @@
         particles.forEach(p => { p.y -= p.speed; if(p.y < 0) p.y = canvas.height; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); });
         requestAnimationFrame(animateParticles);
     }
-    window.addEventListener('resize', initParticles);
     initParticles(); animateParticles();
 
-    /* Lógica Blindada */
+    /* Mazo y Lógica de IA Expandida */
     let barajeado = false;
-    const ritualMsgs = ["El universo escucha...", "Alineando astros...", "La energía fluye...", "El destino se prepara..."];
     const baseImg = "https://www.sacred-texts.com/tarot/pkt/img/";
     const mazo = [
-        { n: "EL LOCO", img: baseImg+"ar00.jpg", e: "un salto de fe" },
-        { n: "EL MAGO", img: baseImg+"ar01.jpg", e: "tu poder creador" },
-        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", e: "tu intuición" },
-        { n: "LA EMPERATRIZ", img: baseImg+"ar03.jpg", e: "abundancia" },
-        { n: "EL EMPERADOR", img: baseImg+"ar04.jpg", e: "estructura" },
-        { n: "EL HIEROFANTE", img: baseImg+"ar05.jpg", e: "sabiduría" },
-        { n: "LOS ENAMORADOS", img: baseImg+"ar06.jpg", e: "una elección" },
-        { n: "EL CARRO", img: baseImg+"ar07.jpg", e: "avance rápido" },
-        { n: "LA FUERZA", img: baseImg+"ar08.jpg", e: "fortaleza interna" },
-        { n: "EL ERMITAÑO", img: baseImg+"ar09.jpg", e: "luz interior" },
-        { n: "LA RUEDA", img: baseImg+"ar10.jpg", e: "giro del destino" },
-        { n: "LA JUSTICIA", img: baseImg+"ar11.jpg", e: "equilibrio" },
-        { n: "EL COLGADO", img: baseImg+"ar12.jpg", e: "pausa" },
-        { n: "LA MUERTE", img: baseImg+"ar13.jpg", e: "cambio total" },
-        { n: "LA TEMPLANZA", img: baseImg+"ar14.jpg", e: "armonía" },
-        { n: "EL DIABLO", img: baseImg+"ar15.jpg", e: "apegos" },
-        { n: "LA TORRE", img: baseImg+"ar16.jpg", e: "ruptura necesaria" },
-        { n: "LA ESTRELLA", img: baseImg+"ar17.jpg", e: "esperanza" },
-        { n: "LA LUNA", img: baseImg+"ar18.jpg", e: "enfrentar miedos" },
-        { n: "EL SOL", img: baseImg+"ar19.jpg", e: "éxito radiante" },
-        { n: "EL JUICIO", img: baseImg+"ar20.jpg", e: "renacimiento" },
-        { n: "EL MUNDO", img: baseImg+"ar21.jpg", e: "plenitud" }
+        { n: "EL LOCO", img: baseImg+"ar00.jpg", d: "un nuevo comienzo lleno de aventura. Es momento de confiar en el universo y dar ese salto de fe que has estado postergando." },
+        { n: "EL MAGO", img: baseImg+"ar01.jpg", d: "el dominio de tus propias herramientas. Tienes todo lo necesario frente a ti para manifestar tu realidad; solo falta tu voluntad." },
+        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", e: "un llamado al silencio y la introspección. Las respuestas no están afuera, sino en los susurros de tu propia intuición." },
+        { n: "LA EMPERATRIZ", img: baseImg+"ar03.jpg", d: "fertilidad y abundancia creativa. La energía de la creación te rodea; es un tiempo para nutrir tus proyectos y verlos florecer." },
+        { n: "EL EMPERADOR", img: baseImg+"ar04.jpg", d: "la necesidad de estructura y orden. Es tiempo de tomar el liderazgo de tu vida con mano firme pero con sabiduría." },
+        { n: "EL HIEROFANTE", img: baseImg+"ar05.jpg", d: "la conexión con la sabiduría ancestral. Busca guía en los valores tradicionales o en un maestro que ilumine tu búsqueda actual." },
+        { n: "LOS ENAMORADOS", img: baseImg+"ar06.jpg", d: "una encrucijada del corazón. No se trata solo de amor, sino de alinear tus valores con las decisiones que estás por tomar." },
+        { n: "EL CARRO", img: baseImg+"ar07.jpg", d: "victoria mediante la determinación. Los conflictos se resuelven si mantienes el control de tus emociones y avanzas con paso firme." },
+        { n: "LA FUERZA", img: baseImg+"ar08.jpg", d: "el coraje de domar tus impulsos. Tu verdadera potencia no reside en la violencia, sino en la paciencia y el amor propio." },
+        { n: "EL ERMITAÑO", img: baseImg+"ar09.jpg", d: "un retiro necesario para iluminar tu sombra. Solo en la soledad encontrarás la verdad que el ruido del mundo te oculta." },
+        { n: "LA RUEDA", img: baseImg+"ar10.jpg", d: "un cambio inevitable de ciclo. El destino gira a tu favor; acepta el movimiento y fluye con los cambios que se aproximan." },
+        { n: "LA JUSTICIA", img: baseImg+"ar11.jpg", d: "la cosecha de tus actos pasados. Todo se equilibrará; la verdad saldrá a la luz y recibirás exactamente lo que has sembrado." },
+        { n: "EL COLGADO", img: baseImg+"ar12.jpg", d: "una nueva perspectiva nacida del sacrificio. A veces, soltar el control y mirar el mundo al revés es la única forma de avanzar." },
+        { n: "LA MUERTE", img: baseImg+"ar13.jpg", d: "un final necesario para un renacimiento. No temas dejar ir lo viejo; solo así dejarás espacio para la transformación que mereces." },
+        { n: "LA TEMPLANZA", img: baseImg+"ar14.jpg", d: "el arte de la moderación y la paciencia. Mezcla tus energías con calma; el equilibrio perfecto está por llegar a tu vida." },
+        { n: "EL DIABLO", img: baseImg+"ar15.jpg", d: "el reconocimiento de tus propias cadenas. Es momento de enfrentar las sombras o dependencias que limitan tu libertad espiritual." },
+        { n: "LA TORRE", img: baseImg+"ar16.jpg", d: "una liberación repentina y necesaria. Aunque el cambio sea brusco, lo que se derrumba era falso para dar lugar a cimientos reales." },
+        { n: "LA ESTRELLA", img: baseImg+"ar17.jpg", d: "una luz de esperanza tras la tormenta. El universo te envía sanación y serenidad; confía en que tus sueños están protegidos." },
+        { n: "LA LUNA", img: baseImg+"ar18.jpg", d: "un viaje a través de tus miedos e ilusiones. No todo es lo que parece; confía en tus sueños y mantente alerta a los engaños." },
+        { n: "EL SOL", img: baseImg+"ar19.jpg", d: "éxito, alegría y vitalidad radiante. La claridad total llega a tus asuntos y te envuelve una energía de felicidad compartida." },
+        { n: "EL JUICIO", img: baseImg+"ar20.jpg", d: "un llamado al despertar y la redención. Es momento de dejar atrás el pasado y responder a tu verdadera vocación espiritual." },
+        { n: "EL MUNDO", img: baseImg+"ar21.jpg", d: "la culminación exitosa de un gran viaje. Has alcanzado la plenitud y la armonía; el mundo está a tus pies en este ciclo." }
     ];
 
-    const consejosBD = ["Evita gastos impulsivos.", "La suerte te sonríe.", "Medita antes de decidir.", "Protege tu luz.", "Confía en tus acuerdos."];
+    const consejosBD = ["La paciencia será tu mejor aliada hoy.", "Un mensaje inesperado traerá claridad.", "Cuida tu energía de personas envidiosas.", "Es un buen momento para iniciar ese plan.", "Escucha los sueños que tuviste anoche."];
 
+    /* LÓGICA DE PROGRAMA (INTOCABLE) */
     window.onload = function() {
         const u = localStorage.getItem('u_n');
         if(!u) document.getElementById('scr-login').style.display = 'flex';
         else {
-            document.getElementById('ritual-msg').innerText = ritualMsgs[Math.floor(Math.random() * ritualMsgs.length)];
+            document.getElementById('ritual-msg').innerText = "El universo te espera...";
             document.getElementById('scr-ritual-eyes').style.display = 'flex';
         }
     };
@@ -200,7 +197,7 @@
 
     function saveUser() {
         const n = document.getElementById('user-name').value;
-        if(!n) return alert("Ingresa tu nombre.");
+        if(!n) return;
         localStorage.setItem('u_n', n); localStorage.setItem('u_m', document.getElementById('user-month').value);
         transition('scr-login', 'scr-ritual-eyes');
     }
@@ -210,7 +207,7 @@
         const c = mazo[Math.floor(Math.random() * mazo.length)];
         document.getElementById('daily-welcome').innerText = `Bienvenida, ${n}`;
         document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`;
-        document.getElementById('daily-text').innerHTML = `Hoy recibes <strong>${c.n}</strong>, indicando ${c.e}.`;
+        document.getElementById('daily-text').innerHTML = `Para este día, el cosmos te revela a <strong>${c.n}</strong>, lo cual presagia ${c.d}`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
 
@@ -218,7 +215,7 @@
 
     function render() {
         const b = document.getElementById('main-board');
-        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
+        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.d}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
     }
 
     function mezclar() {
@@ -227,9 +224,9 @@
     }
 
     let p = [];
-    function pick(el, n, e, img) {
+    function pick(el, n, d, img) {
         if(!barajeado || p.length >= 3 || el.classList.contains('flipped')) return;
-        el.classList.add('flipped'); p.push({n, e, img});
+        el.classList.add('flipped'); p.push({n, d, img});
         if(p.length === 3) {
             setTimeout(() => {
                 document.getElementById('selection-display').innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`).join('');
@@ -243,10 +240,11 @@
         transition('scr-visualize', 'scr-loading');
         setTimeout(() => {
             const m = parseInt(localStorage.getItem('u_m') || "1");
+            const nU = localStorage.getItem('u_n');
             const consejoIdx = (p[0].n.length + m) % consejosBD.length;
-            document.getElementById('res-content').innerHTML = `<div class="res-txt">El oráculo revela que tu camino abre con <strong>${p[0].n}</strong>, se nutre de <strong>${p[1].n}</strong> y culmina en <strong>${p[2].n}</strong>. Estás en un proceso de ${p[2].e}.</div><div class="consejo-box"><strong>Consejo:</strong> ${consejosBD[consejoIdx]}</div>`;
+            document.getElementById('res-content').innerHTML = `<div class="res-txt">${nU}, las estrellas revelan que tu camino inicia con <strong>${p[0].n}</strong>, invitándote a ${p[0].d} Esta energía se nutre de <strong>${p[1].n}</strong> y finalmente se manifiesta a través de <strong>${p[2].n}</strong>, marcando un tiempo de ${p[2].d}</div><div class="consejo-box"><strong>Guía Adicional:</strong> ${consejosBD[consejoIdx]}</div>`;
             transition('scr-loading', 'scr-results');
-        }, 3500); 
+        }, 4000); 
     }
 
     function irPeticion() { transition('scr-results', 'scr-peticion'); }
