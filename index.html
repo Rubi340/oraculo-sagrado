@@ -14,33 +14,39 @@
         .fade-in { animation: fadeIn 1s; }
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; }
         
-        /* Efecto Portal de Fuego Dorado */
+        /* Portal con Resplandor de Fuego */
         .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px rgba(197, 160, 89, 0.5), inset 0 0 20px rgba(197, 160, 89, 0.3); position: relative; }
         .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.5rem; text-shadow: 0 0 10px var(--oro); }
         @keyframes rotatePortal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+        /* La Velita Sagrada */
+        .velita { width: 40px; height: 40px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 20px auto; filter: blur(5px); animation: flame 1.5s infinite alternate; box-shadow: 0 0 40px #ffcc00; }
+        @keyframes flame { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.2); opacity: 1; } }
+
         button { background: linear-gradient(to bottom, #d4af37, #c5a059); border: none; color: black; padding: 16px; font-family: 'Cinzel'; cursor: pointer; margin: 15px auto; width: 280px; border-radius: 5px; font-weight: bold; transition: 0.4s; text-transform: uppercase; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4); }
         button:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(197, 160, 89, 0.6); }
         
-        input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; }
-        
+        input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; }
+        textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; width: 90%; text-align: left; }
+
+        /* Tablero y Cartas */
         #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 12px; width: 100%; margin: 20px auto; transition: 1s; transform: scale(0.85); opacity: 0.3; max-height: 50vh; overflow-y: auto; padding: 10px; }
         .board-focus { transform: scale(1) !important; opacity: 1 !important; }
         
-        /* Cartas Estilo Captura */
         .card { width: 100%; aspect-ratio: 2/3.5; perspective: 1000px; cursor: pointer; }
         .card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; border: 1px solid var(--oro); overflow: hidden; }
         .back { background: radial-gradient(circle, #1a0b2e, #050508); display: flex; align-items: center; justify-content: center; color: var(--oro); }
-        .front { background: #1a0b2e; transform: rotateY(180deg); display: flex; flex-direction: column; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3); }
+        .front { background: #1a0b2e; transform: rotateY(180deg); display: flex; flex-direction: column; }
         .front img { width: 100%; height: 85%; object-fit: cover; border-bottom: 1px solid var(--oro); }
         .front span { font-size: 9px; color: var(--oro); font-weight: bold; padding: 4px; font-family: 'Cinzel'; text-align: center; }
 
-        .special-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--fondo); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 25px; box-sizing: border-box; }
+        .special-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--fondo); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         .res-txt { font-style: italic; color: #fff; margin: 15px 0; font-size: 1.1rem; border-left: 2px solid var(--oro); padding-left: 15px; text-align: left; line-height: 1.6; }
-        
-        /* Fuego/Resplandor Detrás de Cartas Elegidas */
+        .consejo-box { border: 1px dashed var(--oro); padding: 15px; margin-top: 20px; background: rgba(197, 160, 89, 0.1); color: var(--oro); font-weight: bold; border-radius: 8px; }
+
+        /* Aura de Fuego para cartas seleccionadas */
         #selection-display { display: flex; gap: 15px; justify-content: center; width: 100%; margin: 20px auto; }
         .selected-wrapper { filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.6)); animation: fireGlow 2s infinite alternate; }
         @keyframes fireGlow { from { filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.4)); } to { filter: drop-shadow(0 0 25px rgba(197, 160, 89, 0.8)); } }
@@ -59,10 +65,12 @@
         <input type="text" id="user-name" placeholder="Tu Nombre">
         <select id="user-month">
             <option value="" disabled selected>Mes de Nacimiento</option>
-            <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
-            <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
-            <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
-            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+            <option value="1">Enero</option><option value="2">Febrero</option>
+            <option value="3">Marzo</option><option value="4">Abril</option>
+            <option value="5">Mayo</option><option value="6">Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option>
+            <option value="9">Septiembre</option><option value="10">Octubre</option>
+            <option value="11">Noviembre</option><option value="12">Diciembre</option>
         </select>
         <button onclick="saveUser()">Consagrar Acceso</button>
     </div>
@@ -71,7 +79,7 @@
         <h3 id="ritual-msg" style="min-height: 50px;"></h3>
         <div class="portal"></div>
         <div class="eye-ritual">Cierra los ojos...</div>
-        <p>Piensa en la pregunta a la que buscas respuesta.</p>
+        <p>Piensa en la pregunta a la que buscas respuesta y conecta con tu interior.</p>
         <button onclick="mostrarArcanoDia()">Todo está listo</button>
     </div>
 
@@ -92,31 +100,44 @@
     <div id="scr-visualize" class="special-screen">
         <h3>TUS CARTAS ELEGIDAS</h3>
         <div id="selection-display"></div>
-        <p style="color:var(--oro); font-style:italic;">Visualiza tu elección por un momento...</p>
+        <p style="color:var(--oro); font-style:italic;">Visualiza tu elección, el destino se manifiesta...</p>
         <button id="btn-read-now" style="display:none;" onclick="irCargaMistica()">LEER LAS CARTAS</button>
     </div>
 
     <div id="scr-loading" class="special-screen">
         <div class="portal"></div>
         <h3 class="eye-ritual">El oráculo está hablando...</h3>
+        <p>Interpretando la alineación de tus cartas con los astros.</p>
     </div>
 
     <div id="scr-results" class="special-screen">
         <h2>Voz del Destino</h2>
-        <div id="res-content"></div>
+        <div id="res-content" style="max-width: 500px;"></div>
+        <button onclick="irPeticion()">Elevar Petición</button>
+    </div>
+
+    <div id="scr-peticion" class="special-screen">
+        <div class="velita"></div>
+        <h3>Tu Petición Sagrada</h3>
+        <textarea id="p-input" placeholder="Escribe aquí tu deseo sagrado para el universo..."></textarea>
+        <button onclick="enviarPeticion()">Sellar Deseo</button>
+    </div>
+
+    <div id="scr-final" class="special-screen">
+        <div class="velita" style="animation-duration: 0.5s;"></div>
+        <h2>Petición Enviada</h2>
+        <p>Tu mensaje se ha disuelto en la luz divina. Las estrellas trabajan para ti.</p>
         <button onclick="location.reload()">Regresar</button>
     </div>
 
 <script>
     let barajeado = false;
-    const ritualMsgs = ["El universo escucha...", "Alineando astros...", "La energía fluye...", "El destino se prepara..."];
-    
-    // Imágenes más estables
+    const ritualMsgs = ["El universo escucha tus dudas...", "Alineando las constelaciones...", "La energía fluye...", "Tu destino se prepara...", "Conectando con tu guía..."];
     const baseImg = "https://www.sacred-texts.com/tarot/pkt/img/";
     const mazo = [
-        { n: "EL LOCO", img: baseImg+"ar00.jpg", e: "un salto de fe con fe plena" },
-        { n: "EL MAGO", img: baseImg+"ar01.jpg", e: "el poder de tu voluntad" },
-        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", e: "secretos que tu intuición conoce" },
+        { n: "EL LOCO", img: baseImg+"ar00.jpg", e: "un salto al vacío con fe plena" },
+        { n: "EL MAGO", img: baseImg+"ar01.jpg", e: "el poder absoluto de tu voluntad" },
+        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", e: "secretos que tu intuición ya conoce" },
         { n: "LA EMPERATRIZ", img: baseImg+"ar03.jpg", e: "abundancia y creación constante" },
         { n: "EL EMPERADOR", img: baseImg+"ar04.jpg", e: "necesidad de orden y estructura" },
         { n: "EL HIEROFANTE", img: baseImg+"ar05.jpg", e: "guía y sabiduría tradicional" },
@@ -138,6 +159,8 @@
         { n: "EL MUNDO", img: baseImg+"ar21.jpg", e: "culminación de tus sueños" }
     ];
 
+    const consejosBD = ["Evita gastos impulsivos esta semana.", "La suerte te sonreirá en el amor.", "Medita profundamente antes de decidir.", "Protege tu luz interior hoy.", "Las estrellas favorecen tus acuerdos actuales."];
+
     window.onload = function() {
         const u = localStorage.getItem('u_n');
         if(!u) document.getElementById('scr-login').style.display = 'flex';
@@ -151,6 +174,7 @@
         document.getElementById(fromId).classList.add('fade-out');
         setTimeout(() => {
             document.getElementById(fromId).style.display = 'none';
+            document.getElementById(fromId).classList.remove('fade-out');
             document.getElementById(toId).style.display = 'flex';
             document.getElementById(toId).classList.add('fade-in');
         }, 800);
@@ -159,15 +183,16 @@
     function saveUser() {
         localStorage.setItem('u_n', document.getElementById('user-name').value);
         localStorage.setItem('u_m', document.getElementById('user-month').value);
+        document.getElementById('ritual-msg').innerText = ritualMsgs[Math.floor(Math.random() * ritualMsgs.length)];
         transition('scr-login', 'scr-ritual-eyes');
     }
 
     function mostrarArcanoDia() {
         const n = localStorage.getItem('u_n');
         const c = mazo[Math.floor(Math.random() * mazo.length)];
-        document.getElementById('daily-welcome').innerText = `Bienvenido/a, ${n}`;
+        document.getElementById('daily-welcome').innerText = `Te damos la bienvenida, ${n}`;
         document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`;
-        document.getElementById('daily-text').innerText = `Hoy el destino te otorga ${c.n}, lo que indica ${c.e}.`;
+        document.getElementById('daily-text').innerText = `Hoy los astros te otorgan ${c.n}, indicando ${c.e}.`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
 
@@ -186,7 +211,7 @@
             mazo.sort(() => 0.5 - Math.random());
             render();
             document.getElementById('main-board').classList.add('board-focus');
-            document.getElementById('guia-3').innerText = "Elige 3 cartas";
+            document.getElementById('guia-3').innerText = "Elige 3 cartas sagradas";
         }, 1200);
     }
 
@@ -208,10 +233,18 @@
     function irCargaMistica() {
         transition('scr-visualize', 'scr-loading');
         setTimeout(() => {
-            document.getElementById('res-content').innerHTML = `<div class="res-txt">El oráculo revela que tu camino abre con <strong>${p[0].n}</strong>, se nutre de <strong>${p[1].n}</strong> y culmina en <strong>${p[2].n}</strong>. Las estrellas indican que estás en un proceso de ${p[2].e}.</div>`;
+            const m = parseInt(localStorage.getItem('u_m'));
+            const nU = localStorage.getItem('u_n');
+            const consejoIdx = (p[0].n.length + m) % consejosBD.length;
+            document.getElementById('res-content').innerHTML = `
+                <div class="res-txt">${nU}, el oráculo revela que tu camino abre con <strong>${p[0].n}</strong>, se nutre de <strong>${p[1].n}</strong> y culminará en <strong>${p[2].n}</strong>. Las estrellas confirman que estás en un proceso de ${p[2].e}.</div>
+                <div class="consejo-box"><strong>Consejo de la Semana:</strong><br>${consejosBD[consejoIdx]}</div>`;
             transition('scr-loading', 'scr-results');
-        }, 4000); 
+        }, 4500); 
     }
+
+    function irPeticion() { transition('scr-results', 'scr-peticion'); }
+    function enviarPeticion() { transition('scr-peticion', 'scr-final'); }
 </script>
 </body>
 </html>
