@@ -7,64 +7,43 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;1,500&display=swap');
         :root { --fondo: #050508; --oro: #c5a059; --texto: #d1d1d1; --oro-brillo: rgba(197, 160, 89, 0.8); }
-        
         body { background: var(--fondo); color: var(--texto); font-family: 'Lora', serif; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-
         .neblina { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); opacity: 0.1; z-index: -1; animation: moveNeblina 60s linear infinite; }
         @keyframes moveNeblina { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
         #canvas-stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-
         .screen { text-align: center; width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; transition: opacity 0.8s; z-index: 10; }
         .fade-out { opacity: 0 !important; }
         .fade-in { animation: fadeIn 1s; }
-        
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; text-shadow: 0 0 15px var(--oro-brillo); margin: 10px 0; }
-        
-        #daily-card-container { width: 160px; margin: 10px auto; }
+        #daily-card-container { width: 150px; margin: 10px auto; }
         #daily-card-container .card { width: 100% !important; }
-
-        .portal { width: 80px; height: 80px; border: 2px double var(--oro); border-radius: 50%; margin: 15px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px var(--oro-brillo); position: relative; }
-        .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.2rem; }
+        .portal { width: 70px; height: 70px; border: 2px double var(--oro); border-radius: 50%; margin: 10px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px var(--oro-brillo); position: relative; }
+        .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1rem; }
         @keyframes rotatePortal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .velita { width: 35px; height: 35px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 15px auto; filter: blur(4px); animation: flame 1.5s infinite alternate; }
+        .velita { width: 30px; height: 30px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 10px auto; filter: blur(4px); animation: flame 1.5s infinite alternate; }
         @keyframes flame { from { transform: scale(1); opacity: 0.7; } to { transform: scale(1.2); opacity: 1; } }
-
-        button { background: linear-gradient(to bottom, #d4af37, #c5a059); border: none; color: black; padding: 14px; font-family: 'Cinzel'; cursor: pointer; margin: 10px auto; width: 260px; border-radius: 5px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4); }
-        
-        input, select, textarea { background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 10px; margin: 8px; font-size: 1.1rem; outline: none; width: 80%; max-width: 280px; font-family: 'Lora'; }
-        
-        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 10px; width: 100%; margin: 15px auto; max-height: 40vh; overflow-y: auto; padding: 10px; opacity: 0.3; transition: 1s; }
+        button { background: linear-gradient(to bottom, #d4af37, #c5a059); border: none; color: black; padding: 12px; font-family: 'Cinzel'; cursor: pointer; margin: 8px auto; width: 240px; border-radius: 5px; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4); }
+        .btn-pro { background: transparent; border: 1px solid var(--oro); color: var(--oro); width: auto; padding: 5px 15px; font-size: 0.7rem; margin-top: 10px; }
+        input, select, textarea { background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 10px; margin: 5px; font-size: 1rem; outline: none; width: 80%; max-width: 250px; font-family: 'Lora'; }
+        #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 8px; width: 100%; margin: 10px auto; max-height: 40vh; overflow-y: auto; padding: 10px; opacity: 0.3; transition: 1s; }
         .board-focus { opacity: 1 !important; transform: scale(1); }
-        
         .card { width: 100%; aspect-ratio: 2/3.5; perspective: 1000px; cursor: pointer; }
         .card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 6px; border: 1px solid var(--oro); overflow: hidden; }
-        .back { background: radial-gradient(circle, #1a0b2e, #050508); display: flex; align-items: center; justify-content: center; color: var(--oro); font-size: 1.5rem; }
+        .back { background: radial-gradient(circle, #1a0b2e, #050508); display: flex; align-items: center; justify-content: center; color: var(--oro); font-size: 1.2rem; }
         .front { background: #1a0b2e; transform: rotateY(180deg); display: flex; flex-direction: column; }
-        .front img { width: 100%; height: 82%; object-fit: cover; border-bottom: 1px solid var(--oro); }
-        .front span { font-size: 8px; color: var(--oro); font-weight: bold; padding: 3px; font-family: 'Cinzel'; text-align: center; }
-
+        .front img { width: 100%; height: 80%; object-fit: cover; border-bottom: 1px solid var(--oro); }
+        .front span { font-size: 7px; color: var(--oro); font-weight: bold; padding: 2px; font-family: 'Cinzel'; text-align: center; }
         .special-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--fondo); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .res-txt { font-style: italic; color: #fff; margin: 10px 0; font-size: 1rem; border-left: 2px solid var(--oro); padding-left: 12px; text-align: left; line-height: 1.5; }
-        .consejo-box { border: 1px dashed var(--oro); padding: 12px; margin-top: 15px; background: rgba(197, 160, 89, 0.1); color: var(--oro); font-size: 0.9rem; border-radius: 8px; }
-
-        #selection-display { display: flex; gap: 10px; justify-content: center; width: 100%; margin: 15px auto; }
-        .selected-wrapper { filter: drop-shadow(0 0 15px var(--oro-brillo)); animation: fireGlow 2s infinite alternate; }
-        @keyframes fireGlow { from { filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.5)); } to { filter: drop-shadow(0 0 20px var(--oro-brillo)); } }
-        #selection-display .card { width: 85px; }
-
-        .eye-ritual { font-size: 1.2rem; color: var(--oro); font-style: italic; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .mode-switch { margin-top: 20px; border-top: 1px solid rgba(197, 160, 89, 0.3); padding-top: 15px; }
-        .mode-status { font-size: 0.8rem; color: var(--oro); margin-bottom: 10px; text-transform: uppercase; }
+        .res-txt { font-style: italic; color: #fff; margin: 10px 0; font-size: 0.95rem; border-left: 2px solid var(--oro); padding-left: 12px; text-align: left; line-height: 1.4; }
+        .consejo-box { border: 1px dashed var(--oro); padding: 12px; margin-top: 10px; background: rgba(197, 160, 89, 0.1); color: var(--oro); font-size: 0.85rem; border-radius: 8px; }
+        #selection-display { display: flex; gap: 8px; justify-content: center; width: 100%; margin: 10px auto; }
+        .selected-wrapper { filter: drop-shadow(0 0 15px var(--oro-brillo)); }
+        #selection-display .card { width: 80px; }
     </style>
 </head>
 <body>
-
     <div class="neblina"></div>
     <canvas id="canvas-stars"></canvas>
 
@@ -73,30 +52,24 @@
         <div class="portal"></div>
         <input type="text" id="user-name" placeholder="Tu Nombre">
         <select id="user-month">
-            <option value="" disabled selected>Mes de Nacimiento</option>
             <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
             <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
             <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
             <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
         </select>
         <button onclick="saveUser()">Consagrar Acceso</button>
-        <div class="mode-switch">
-            <div id="status-txt" class="mode-status">Nivel 1: Iniciado Activado</div>
-            <button id="btn-unlock-pro" style="width:200px; font-size:0.7rem;" onclick="activarModoPro()">Desbloquear Nivel Maestro</button>
-        </div>
+        <button id="btn-master" class="btn-pro" onclick="activarMaestro()">Activar Nivel Maestro</button>
     </div>
 
     <div id="scr-ritual-eyes" class="screen" style="display:none;">
-        <h3 id="ritual-msg" style="min-height: 40px;"></h3>
+        <h3 id="ritual-msg"></h3>
         <div class="portal"></div>
-        <div class="eye-ritual">Cierra los ojos...</div>
-        <p>Conecta con tu interior para recibir tu guía.</p>
-        <button onclick="mostrarArcanoDia()">Todo está listo</button>
+        <div style="font-style:italic; color:var(--oro);">Cierra los ojos...</div>
+        <button onclick="mostrarArcanoDia()">Listo</button>
     </div>
 
     <div id="scr-daily" class="screen" style="display:none;">
-        <h3 id="daily-welcome"></h3>
-        <h2>Revelación de Hoy</h2>
+        <h2 id="daily-welcome"></h2>
         <div id="daily-card-container"></div>
         <div id="daily-text" class="res-txt"></div>
         <button onclick="irTableroRitual()">Lectura Profunda</button>
@@ -104,41 +77,31 @@
 
     <div id="scr-ritual-3" class="screen" style="display:none;">
         <p id="guia-3" style="color:var(--oro)">Baraja las energías...</p>
-        <button id="btn-mix" onclick="mezclar()">Barajar Mazo</button>
+        <button id="btn-mix" onclick="mezclar()">Barajar</button>
         <div id="main-board"></div>
     </div>
 
     <div id="scr-visualize" class="special-screen">
-        <h3>TUS CARTAS ELEGIDAS</h3>
+        <h3>TUS CARTAS</h3>
         <div id="selection-display"></div>
-        <p style="color:var(--oro); font-style:italic;">Visualiza tu elección...</p>
-        <button id="btn-read-now" style="display:none;" onclick="irCargaMistica()">LEER LAS CARTAS</button>
+        <button id="btn-read-now" style="display:none;" onclick="irCargaMistica()">LEER</button>
     </div>
 
-    <div id="scr-loading" class="special-screen">
-        <div class="portal"></div>
-        <h3 class="eye-ritual">El oráculo habla...</h3>
-    </div>
+    <div id="scr-loading" class="special-screen"><div class="portal"></div><h3>Interpretando...</h3></div>
 
     <div id="scr-results" class="special-screen">
         <h2>Voz del Destino</h2>
-        <div id="res-content" style="max-width: 450px;"></div>
-        <button onclick="irPeticion()">Elevar Petición</button>
+        <div id="res-content"></div>
+        <button onclick="transition('scr-results', 'scr-peticion')">Petición</button>
     </div>
 
     <div id="scr-peticion" class="special-screen">
         <div class="velita"></div>
-        <h3>Tu Petición Sagrada</h3>
-        <textarea id="p-input" placeholder="Escribe aquí tu deseo..."></textarea>
-        <button onclick="enviarPeticion()">Sellar Deseo</button>
+        <textarea id="p-input" placeholder="Tu deseo..."></textarea>
+        <button onclick="transition('scr-peticion', 'scr-final')">Sellar</button>
     </div>
 
-    <div id="scr-final" class="special-screen">
-        <div class="velita" style="animation-duration: 0.5s;"></div>
-        <h2>Petición Enviada</h2>
-        <p>Tu mensaje se ha disuelto en la luz divina.</p>
-        <button onclick="location.reload()">Regresar</button>
-    </div>
+    <div id="scr-final" class="special-screen"><h2>Enviado</h2><button onclick="location.reload()">Regresar</button></div>
 
 <script>
     const canvas = document.getElementById('canvas-stars');
@@ -146,90 +109,61 @@
     let particles = [];
     function initParticles() {
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        particles = [];
-        for(let i=0; i<40; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5, speed: Math.random()*0.4+0.1 });
+        for(let i=0; i<30; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5, speed: Math.random()*0.3+0.1 });
     }
-    function animateParticles() {
+    function animate() {
         ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "#c5a059";
         particles.forEach(p => { p.y -= p.speed; if(p.y < 0) p.y = canvas.height; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); });
-        requestAnimationFrame(animateParticles);
+        requestAnimationFrame(animate);
     }
-    initParticles(); animateParticles();
+    initParticles(); animate();
 
     const baseImg = "https://www.sacred-texts.com/tarot/pkt/img/";
-    const mazoNivel1 = [
-        { n: "EL LOCO", img: baseImg+"ar00.jpg", d: "un nuevo comienzo lleno de aventura. Es momento de confiar en el universo y dar ese salto de fe." },
-        { n: "EL MAGO", img: baseImg+"ar01.jpg", d: "el dominio de tus propias herramientas. Tienes todo lo necesario frente a ti para manifestar tu realidad." },
-        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", d: "un llamado al silencio e introspección. Las respuestas están en los susurros de tu intuición." },
-        { n: "LA EMPERATRIZ", img: baseImg+"ar03.jpg", d: "fertilidad y abundancia creativa. La energía de la creación te rodea; es tiempo de nutrir proyectos." },
-        { n: "EL EMPERADOR", img: baseImg+"ar04.jpg", d: "la necesidad de estructura y orden. Toma el liderazgo de tu vida con sabiduría." },
-        { n: "EL HIEROFANTE", img: baseImg+"ar05.jpg", d: "conexión con sabiduría ancestral. Busca guía en valores tradicionales o maestros." },
-        { n: "LOS ENAMORADOS", img: baseImg+"ar06.jpg", d: "una encrucijada del corazón. Alinea tus valores con tus próximas decisiones." },
-        { n: "EL CARRO", img: baseImg+"ar07.jpg", d: "victoria mediante determinación. Los conflictos se resuelven si mantienes control emocional." },
-        { n: "LA FUERZA", img: baseImg+"ar08.jpg", d: "coraje de domar impulsos. Tu verdadera potencia reside en la paciencia y amor propio." },
-        { n: "EL ERMITAÑO", img: baseImg+"ar09.jpg", d: "un retiro necesario. Solo en la soledad encontrarás la verdad que el ruido oculta." },
-        { n: "LA RUEDA", img: baseImg+"ar10.jpg", d: "cambio inevitable de ciclo. El destino gira a tu favor; acepta el movimiento." },
-        { n: "LA JUSTICIA", img: baseImg+"ar11.jpg", d: "cosecha de tus actos. Todo se equilibrará; recibirás exactamente lo que has sembrado." },
-        { n: "EL COLGADO", img: baseImg+"ar12.jpg", d: "una nueva perspectiva. Soltar el control y mirar diferente es la única forma de avanzar." },
-        { n: "LA MUERTE", img: baseImg+"ar13.jpg", d: "final necesario para renacer. No temas dejar ir lo viejo; dejas espacio a la transformación." },
-        { n: "LA TEMPLANZA", img: baseImg+"ar14.jpg", d: "moderación y paciencia. El equilibrio perfecto está por llegar a tu vida." },
-        { n: "EL DIABLO", img: baseImg+"ar15.jpg", d: "reconocimiento de cadenas. Enfrenta las sombras que limitan tu libertad espiritual." },
-        { n: "LA TORRE", img: baseImg+"ar16.jpg", d: "liberación repentina. Lo que se derrumba era falso para dar lugar a cimientos reales." },
-        { n: "LA ESTRELLA", img: baseImg+"ar17.jpg", d: "esperanza tras la tormenta. El universo envía sanación y serenidad protegida." },
-        { n: "LA LUNA", img: baseImg+"ar18.jpg", d: "viaje por miedos e ilusiones. Confía en tus sueños y alerta a los engaños." },
-        { n: "EL SOL", img: baseImg+"ar19.jpg", d: "éxito y vitalidad radiante. La claridad total llega y te envuelve felicidad." },
-        { n: "EL JUICIO", img: baseImg+"ar20.jpg", d: "llamado al despertar. Es momento de responder a tu verdadera vocación espiritual." },
-        { n: "EL MUNDO", img: baseImg+"ar21.jpg", d: "culminación de un gran viaje. Has alcanzado plenitud y armonía total." }
+    const mazo8 = [
+        { n: "EL LOCO", img: baseImg+"ar00.jpg", d: "un nuevo comienzo lleno de aventura." },
+        { n: "EL MAGO", img: baseImg+"ar01.jpg", d: "el dominio de tus herramientas." },
+        { n: "LA SACERDOTISA", img: baseImg+"ar02.jpg", d: "un llamado a la introspección." },
+        { n: "LA EMPERATRIZ", img: baseImg+"ar03.jpg", d: "abundancia creativa." },
+        { n: "EL EMPERADOR", img: baseImg+"ar04.jpg", d: "estructura y orden." },
+        { n: "EL HIEROFANTE", img: baseImg+"ar05.jpg", d: "sabiduría ancestral." },
+        { n: "LOS ENAMORADOS", img: baseImg+"ar06.jpg", d: "una elección del corazón." },
+        { n: "EL CARRO", img: baseImg+"ar07.jpg", d: "victoria por determinación." },
+        { n: "LA FUERZA", img: baseImg+"ar08.jpg", d: "coraje y amor propio." },
+        { n: "EL ERMITAÑO", img: baseImg+"ar09.jpg", d: "iluminación en la soledad." },
+        { n: "LA RUEDA", img: baseImg+"ar10.jpg", d: "un giro del destino." },
+        { n: "LA JUSTICIA", img: baseImg+"ar11.jpg", d: "equilibrio y verdad." },
+        { n: "EL COLGADO", img: baseImg+"ar12.jpg", d: "nueva perspectiva." },
+        { n: "LA MUERTE", img: baseImg+"ar13.jpg", d: "un renacimiento necesario." },
+        { n: "LA TEMPLANZA", img: baseImg+"ar14.jpg", d: "moderación y armonía." },
+        { n: "EL DIABLO", img: baseImg+"ar15.jpg", d: "enfrentar tus sombras." },
+        { n: "LA TORRE", img: baseImg+"ar16.jpg", d: "liberación repentina." },
+        { n: "LA ESTRELLA", img: baseImg+"ar17.jpg", d: "esperanza y sanación." },
+        { n: "LA LUNA", img: baseImg+"ar18.jpg", d: "confía en tu intuición." },
+        { n: "EL SOL", img: baseImg+"ar19.jpg", d: "éxito y vitalidad." },
+        { n: "EL JUICIO", img: baseImg+"ar20.jpg", d: "despertar espiritual." },
+        { n: "EL MUNDO", img: baseImg+"ar21.jpg", d: "plenitud alcanzada." },
+        { n: "AS DE OROS", img: baseImg+"pe01.jpg", d: "prosperidad material." },
+        { n: "REY DE OROS", img: baseImg+"pe14.jpg", d: "maestría financiera." },
+        { n: "AS DE COPAS", img: baseImg+"cu01.jpg", d: "amor desbordante." },
+        { n: "DIEZ DE COPAS", img: baseImg+"cu10.jpg", d: "armonía familiar." },
+        { n: "AS DE ESPADAS", img: baseImg+"sw01.jpg", d: "claridad mental cortante." },
+        { n: "AS DE BASTOS", img: baseImg+"wa01.jpg", d: "chispa de pasión nueva." }
     ];
 
-    const mazoPro = [
-        { n: "AS DE OROS", img: baseImg+"pe01.jpg", d: "semilla de prosperidad material. Un nuevo recurso o salud se manifiesta hoy." },
-        { n: "DOS DE OROS", img: baseImg+"pe02.jpg", d: "equilibrio dinámico. Manejas varias prioridades; mantén flexibilidad para no caer." },
-        { n: "TRES DE OROS", img: baseImg+"pe03.jpg", d: "maestría reconocida. Tu trabajo técnico es valorado; el equipo dará frutos." },
-        { n: "CUATRO DE OROS", img: baseImg+"pe04.jpg", d: "estabilidad defensiva. Cuidado con cerrarte al cambio por miedo a perder seguridad." },
-        { n: "CINCO DE OROS", img: baseImg+"pe05.jpg", d: "prueba de fe material. Aunque sientas escasez, la ayuda espiritual está cerca." },
-        { n: "SEIS DE OROS", img: baseImg+"pe06.jpg", d: "flujo de generosidad. Equilibra tus deudas materiales y espirituales hoy." },
-        { n: "SIETE DE OROS", img: baseImg+"pe07.jpg", d: "cosecha paciente. Los frutos de tu esfuerzo están madurando a su ritmo." },
-        { n: "OCHO DE OROS", img: baseImg+"pe08.jpg", d: "perfeccionamiento. Tu enfoque en detalles te llevará a la excelencia profesional." },
-        { n: "NUEVE DE OROS", img: baseImg+"pe09.jpg", d: "independencia y lujo. Disfruta de la seguridad construida con tu propio talento." },
-        { n: "DIEZ DE OROS", img: baseImg+"pe10.jpg", d: "legado y estabilidad familiar. Prosperidad absoluta en tus raíces y hogar." },
-        { n: "AS DE COPAS", img: baseImg+"cu01.jpg", d: "bendición emocional. Tu copa desborda nueva energía espiritual y amor puro." },
-        { n: "DOS DE COPAS", img: baseImg+"cu02.jpg", d: "unión sagrada. Se manifiesta una asociación basada en el respeto y equilibrio." },
-        { n: "TRES DE COPAS", img: baseImg+"cu03.jpg", d: "alegría colectiva. Celebra los éxitos con tu comunidad y red de apoyo." },
-        { n: "CUATRO DE COPAS", img: baseImg+"cu04.jpg", d: "introspección. No ignores las nuevas bendiciones por estar absorta en lo viejo." },
-        { n: "CINCO DE COPAS", img: baseImg+"cu05.jpg", d: "liberación del duelo. Deja de mirar lo perdido; hay mucho aún por agradecer." },
-        { n: "SEIS DE COPAS", img: baseImg+"cu06.jpg", d: "ternura del pasado. Un recuerdo trae lecciones de inocencia y pureza emocional." },
-        { n: "SIETE DE COPAS", img: baseImg+"cu07.jpg", d: "discernimiento. Mantén pies en tierra para no perderte en ilusiones sin base." },
-        { n: "OCHO DE COPAS", img: baseImg+"cu08.jpg", d: "evolución espiritual. Dejas atrás lo que no llena tu alma para buscar tu verdad." },
-        { n: "NUEVE DE COPAS", img: baseImg+"cu09.jpg", d: "deseo cumplido. La satisfacción emocional llega; agradece este regalo divino." },
-        { n: "DIEZ DE COPAS", img: baseImg+"cu10.jpg", d: "plenitud en el hogar. El amor alcanza su punto más alto de armonía." }
-    ];
-
-    const consejosBD = ["La paciencia será tu mejor aliada hoy.", "Un mensaje inesperado traerá claridad.", "Cuida tu energía de influencias externas.", "Es un buen momento para actuar sobre tus planes.", "Escucha los sueños que tuviste anoche."];
-
-    let modoProActivo = false;
-    let currentMazo = [...mazoNivel1];
-    let p = [];
-    let barajeado = false;
+    let esMaestro = localStorage.getItem('maestro') === 'true';
+    let currentMazo = esMaestro ? mazo8 : mazo8.slice(0,22);
+    let p = []; let barajeado = false;
 
     window.onload = function() {
+        if(esMaestro) document.getElementById('btn-master').style.display = 'none';
         const u = localStorage.getItem('u_n');
-        const pro = localStorage.getItem('modo_pro');
-        if(pro === 'true') activarModoPro(true);
         if(!u) document.getElementById('scr-login').style.display = 'flex';
-        else {
-            document.getElementById('ritual-msg').innerText = "Alineando tu destino...";
-            document.getElementById('scr-ritual-eyes').style.display = 'flex';
-        }
+        else { document.getElementById('ritual-msg').innerText = "Conectando..."; document.getElementById('scr-ritual-eyes').style.display = 'flex'; }
     };
 
-    function activarModoPro(silencioso = false) {
-        modoProActivo = true;
-        currentMazo = [...mazoNivel1, ...mazoPro];
-        localStorage.setItem('modo_pro', 'true');
-        document.getElementById('status-txt').innerText = "Nivel 2: Maestro Desbloqueado";
-        document.getElementById('btn-unlock-pro').style.display = 'none';
-        if(!silencioso) alert("¡Nivel Maestro (78 cartas) Activado!");
+    function activarMaestro() { 
+        localStorage.setItem('maestro', 'true'); esMaestro = true; 
+        currentMazo = mazo8; alert("¡Nivel Maestro Activado!"); location.reload(); 
     }
 
     function transition(fromId, toId) {
@@ -238,59 +172,3 @@
     }
 
     function saveUser() {
-        const n = document.getElementById('user-name').value;
-        if(!n) return;
-        localStorage.setItem('u_n', n); localStorage.setItem('u_m', document.getElementById('user-month').value);
-        transition('scr-login', 'scr-ritual-eyes');
-    }
-
-    function mostrarArcanoDia() {
-        const n = localStorage.getItem('u_n');
-        const c = currentMazo[Math.floor(Math.random() * currentMazo.length)];
-        document.getElementById('daily-welcome').innerText = `Bienvenida, ${n}`;
-        document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`;
-        document.getElementById('daily-text').innerHTML = `Para este día sagrado, el oráculo revela a <strong>${c.n}</strong>. Esto presagia ${c.d}`;
-        transition('scr-ritual-eyes', 'scr-daily');
-    }
-
-    function irTableroRitual() { transition('scr-daily', 'scr-ritual-3'); render(); }
-
-    function render() {
-        const b = document.getElementById('main-board');
-        b.innerHTML = currentMazo.map((c, i) => `<div class="card" onclick="pick(this, ${i})"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
-    }
-
-    function mezclar() {
-        barajeado = true; document.getElementById('btn-mix').style.display = 'none';
-        setTimeout(() => { currentMazo.sort(() => 0.5 - Math.random()); render(); document.getElementById('main-board').classList.add('board-focus'); }, 1000);
-    }
-
-    function pick(el, idx) {
-        if(!barajeado || p.length >= 3 || el.classList.contains('flipped')) return;
-        el.classList.add('flipped'); 
-        p.push(currentMazo[idx]);
-        if(p.length === 3) {
-            setTimeout(() => {
-                document.getElementById('selection-display').innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`).join('');
-                transition('scr-ritual-3', 'scr-visualize');
-                setTimeout(() => document.getElementById('btn-read-now').style.display = 'block', 2500);
-            }, 800);
-        }
-    }
-
-    function irCargaMistica() {
-        transition('scr-visualize', 'scr-loading');
-        setTimeout(() => {
-            const nU = localStorage.getItem('u_n');
-            const m = parseInt(localStorage.getItem('u_m') || "1");
-            const consejoIdx = (p[0].n.length + m) % consejosBD.length;
-            document.getElementById('res-content').innerHTML = `<div class="res-txt">${nU}, tu lectura inicia con <strong>${p[0].n}</strong>, invitándote a ${p[0].d} Esta energía se nutre de <strong>${p[1].n}</strong> y culmina en <strong>${p[2].n}</strong>, marcando un tiempo de ${p[2].d}</div><div class="consejo-box"><strong>Guía Maestra:</strong> ${consejosBD[consejoIdx]}</div>`;
-            transition('scr-loading', 'scr-results');
-        }, 4000); 
-    }
-
-    function irPeticion() { transition('scr-results', 'scr-peticion'); }
-    function enviarPeticion() { transition('scr-peticion', 'scr-final'); }
-</script>
-</body>
-</html>
