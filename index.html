@@ -14,12 +14,12 @@
         .fade-in { animation: fadeIn 1s; }
         h1, h2, h3 { font-family: 'Cinzel', serif; color: var(--oro); letter-spacing: 2px; }
         
-        /* Portal con Resplandor de Fuego */
+        /* Portal y Fuego Dorado */
         .portal { width: 100px; height: 100px; border: 2px double var(--oro); border-radius: 50%; margin: 20px auto; animation: rotatePortal 20s linear infinite; box-shadow: 0 0 30px rgba(197, 160, 89, 0.5), inset 0 0 20px rgba(197, 160, 89, 0.3); position: relative; }
         .portal::after { content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--oro); font-size: 1.5rem; text-shadow: 0 0 10px var(--oro); }
         @keyframes rotatePortal { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* La Velita Sagrada */
+        /* La Velita */
         .velita { width: 40px; height: 40px; background: radial-gradient(circle, #fff, #ffcc00, transparent); border-radius: 50%; margin: 20px auto; filter: blur(5px); animation: flame 1.5s infinite alternate; box-shadow: 0 0 40px #ffcc00; }
         @keyframes flame { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.2); opacity: 1; } }
 
@@ -29,7 +29,6 @@
         input, select, textarea { background: transparent; border: none; border-bottom: 1px solid var(--oro); color: white; text-align: center; padding: 12px; margin: 10px; font-size: 1.2rem; outline: none; width: 80%; max-width: 300px; font-family: 'Lora'; }
         textarea { border: 1px solid var(--oro); height: 80px; border-radius: 4px; padding: 10px; margin-top: 20px; width: 90%; text-align: left; }
 
-        /* Tablero y Cartas */
         #main-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 12px; width: 100%; margin: 20px auto; transition: 1s; transform: scale(0.85); opacity: 0.3; max-height: 50vh; overflow-y: auto; padding: 10px; }
         .board-focus { transform: scale(1) !important; opacity: 1 !important; }
         
@@ -46,7 +45,6 @@
         .res-txt { font-style: italic; color: #fff; margin: 15px 0; font-size: 1.1rem; border-left: 2px solid var(--oro); padding-left: 15px; text-align: left; line-height: 1.6; }
         .consejo-box { border: 1px dashed var(--oro); padding: 15px; margin-top: 20px; background: rgba(197, 160, 89, 0.1); color: var(--oro); font-weight: bold; border-radius: 8px; }
 
-        /* Aura de Fuego para cartas seleccionadas */
         #selection-display { display: flex; gap: 15px; justify-content: center; width: 100%; margin: 20px auto; }
         .selected-wrapper { filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.6)); animation: fireGlow 2s infinite alternate; }
         @keyframes fireGlow { from { filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.4)); } to { filter: drop-shadow(0 0 25px rgba(197, 160, 89, 0.8)); } }
@@ -65,12 +63,10 @@
         <input type="text" id="user-name" placeholder="Tu Nombre">
         <select id="user-month">
             <option value="" disabled selected>Mes de Nacimiento</option>
-            <option value="1">Enero</option><option value="2">Febrero</option>
-            <option value="3">Marzo</option><option value="4">Abril</option>
-            <option value="5">Mayo</option><option value="6">Junio</option>
-            <option value="7">Julio</option><option value="8">Agosto</option>
-            <option value="9">Septiembre</option><option value="10">Octubre</option>
-            <option value="11">Noviembre</option><option value="12">Diciembre</option>
+            <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+            <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
         </select>
         <button onclick="saveUser()">Consagrar Acceso</button>
     </div>
@@ -171,28 +167,35 @@
     };
 
     function transition(fromId, toId) {
-        document.getElementById(fromId).classList.add('fade-out');
+        const from = document.getElementById(fromId);
+        from.classList.add('fade-out');
         setTimeout(() => {
-            document.getElementById(fromId).style.display = 'none';
-            document.getElementById(fromId).classList.remove('fade-out');
-            document.getElementById(toId).style.display = 'flex';
-            document.getElementById(toId).classList.add('fade-in');
+            from.style.display = 'none';
+            from.classList.remove('fade-out');
+            const to = document.getElementById(toId);
+            to.style.display = 'flex';
+            to.classList.add('fade-in');
         }, 800);
     }
 
     function saveUser() {
-        localStorage.setItem('u_n', document.getElementById('user-name').value);
-        localStorage.setItem('u_m', document.getElementById('user-month').value);
+        const n = document.getElementById('user-name').value;
+        const m = document.getElementById('user-month').value;
+        if(!n || !m) return alert("El oráculo requiere tu esencia.");
+        localStorage.setItem('u_n', n);
+        localStorage.setItem('u_m', m);
         document.getElementById('ritual-msg').innerText = ritualMsgs[Math.floor(Math.random() * ritualMsgs.length)];
         transition('scr-login', 'scr-ritual-eyes');
     }
 
     function mostrarArcanoDia() {
         const n = localStorage.getItem('u_n');
-        const c = mazo[Math.floor(Math.random() * mazo.length)];
+        const m = parseInt(localStorage.getItem('u_m'));
+        const d = new Date().getDate();
+        const c = mazo[(n.length + m + d) % mazo.length];
         document.getElementById('daily-welcome').innerText = `Te damos la bienvenida, ${n}`;
-        document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`;
-        document.getElementById('daily-text').innerText = `Hoy los astros te otorgan ${c.n}, indicando ${c.e}.`;
+        document.getElementById('daily-card-container').innerHTML = `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div></div>`;
+        document.getElementById('daily-text').innerHTML = `Hoy los astros te otorgan <strong>${c.n}</strong>, indicando ${c.e}.`;
         transition('scr-ritual-eyes', 'scr-daily');
     }
 
@@ -200,7 +203,7 @@
 
     function render() {
         const b = document.getElementById('main-board');
-        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div>`).join('');
+        b.innerHTML = mazo.map(c => `<div class="card" onclick="pick(this, '${c.n}', '${c.e}', '${c.img}')"><div class="card-inner"><div class="face back">✦</div><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div>`).join('');
     }
 
     function mezclar() {
@@ -218,12 +221,13 @@
     let p = [];
     function pick(el, n, e, img) {
         if(!barajeado || p.length >= 3) return;
+        if(el.classList.contains('flipped')) return;
         el.classList.add('flipped');
         p.push({n, e, img});
         if(p.length === 3) {
             setTimeout(() => {
                 const display = document.getElementById('selection-display');
-                display.innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}"><span>${c.n}</span></div></div></div></div>`).join('');
+                display.innerHTML = p.map(c => `<div class="selected-wrapper"><div class="card flipped"><div class="card-inner"><div class="face front"><img src="${c.img}" loading="lazy"><span>${c.n}</span></div></div></div></div>`).join('');
                 transition('scr-ritual-3', 'scr-visualize');
                 setTimeout(() => document.getElementById('btn-read-now').style.display = 'block', 3000);
             }, 1000);
@@ -234,8 +238,9 @@
         transition('scr-visualize', 'scr-loading');
         setTimeout(() => {
             const m = parseInt(localStorage.getItem('u_m'));
+            const hoy = new Date().getDate();
             const nU = localStorage.getItem('u_n');
-            const consejoIdx = (p[0].n.length + m) % consejosBD.length;
+            const consejoIdx = (p[0].n.length + m + hoy) % consejosBD.length;
             document.getElementById('res-content').innerHTML = `
                 <div class="res-txt">${nU}, el oráculo revela que tu camino abre con <strong>${p[0].n}</strong>, se nutre de <strong>${p[1].n}</strong> y culminará en <strong>${p[2].n}</strong>. Las estrellas confirman que estás en un proceso de ${p[2].e}.</div>
                 <div class="consejo-box"><strong>Consejo de la Semana:</strong><br>${consejosBD[consejoIdx]}</div>`;
